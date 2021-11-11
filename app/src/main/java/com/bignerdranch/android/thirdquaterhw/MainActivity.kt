@@ -1,27 +1,20 @@
 package com.bignerdranch.android.thirdquaterhw
 
-import android.os.Bundle
+import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bignerdranch.android.thirdquaterhw.databinding.ActivityMainBinding
 import com.bignerdranch.android.thirdquaterhw.presenter.BackButtonListener
 import com.bignerdranch.android.thirdquaterhw.presenter.MainPresenter
-import com.bignerdranch.android.thirdquaterhw.view.AndroidScreens
 import com.bignerdranch.android.thirdquaterhw.view.MainView
 import com.github.terrakok.cicerone.androidx.AppNavigator
 import moxy.MvpAppCompatActivity
 import moxy.ktx.moxyPresenter
 
-class MainActivity : MvpAppCompatActivity(), MainView {
+class MainActivity : MvpAppCompatActivity(R.layout.activity_main), MainView {
 
     private val navigator = AppNavigator(this, R.id.container)
-
+    private val binding by viewBinding(ActivityMainBinding::bind)
     private val presenter by moxyPresenter { MainPresenter(App.instance.router, AndroidScreens()) }
-    private var vb: ActivityMainBinding? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        vb = ActivityMainBinding.inflate(layoutInflater)
-        setContentView(vb?.root)
-    }
 
     override fun onResumeFragments() {
         super.onResumeFragments()

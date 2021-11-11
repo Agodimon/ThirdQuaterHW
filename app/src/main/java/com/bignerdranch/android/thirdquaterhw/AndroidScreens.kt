@@ -1,7 +1,5 @@
-package com.bignerdranch.android.thirdquaterhw.view
+package com.bignerdranch.android.thirdquaterhw
 
-import com.bignerdranch.android.thirdquaterhw.UserFragment
-import com.bignerdranch.android.thirdquaterhw.UsersFragment
 import com.bignerdranch.android.thirdquaterhw.model.GithubUser
 import com.bignerdranch.android.thirdquaterhw.presenter.IScreens
 import com.github.terrakok.cicerone.androidx.FragmentScreen

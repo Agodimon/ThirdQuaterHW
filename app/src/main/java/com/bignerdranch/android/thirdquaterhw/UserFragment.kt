@@ -1,8 +1,7 @@
 package com.bignerdranch.android.thirdquaterhw
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.ViewGroup
+import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bignerdranch.android.thirdquaterhw.databinding.FragmentUserBinding
 import com.bignerdranch.android.thirdquaterhw.model.GithubUser
 import com.bignerdranch.android.thirdquaterhw.presenter.BackButtonListener
@@ -11,23 +10,16 @@ import com.bignerdranch.android.thirdquaterhw.view.UserView
 import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
 
-class UserFragment : MvpAppCompatFragment(), UserView, BackButtonListener {
+class UserFragment : MvpAppCompatFragment(R.layout.fragment_user), UserView, BackButtonListener {
 
-    private var vb: FragmentUserBinding? = null
+    private val vb by viewBinding(FragmentUserBinding::bind)
     private val presenter: UserPresenter by moxyPresenter {
         val user = arguments?.getParcelable<GithubUser>(USER) as GithubUser
         UserPresenter(App.instance.router, user)
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ) = FragmentUserBinding.inflate(inflater, container, false).also {
-        vb = it
-    }.root
-
     override fun setLogin(text: String) {
-        vb?.userLoginText?.text = text
+        text.also { vb.userLoginText.text = it }
     }
 
     override fun backPressed() = presenter.backPressed()
