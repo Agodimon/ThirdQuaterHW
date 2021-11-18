@@ -52,8 +52,6 @@ class UsersPresenter(
                             .updateList()
                     }
             )
-
-
     }
 
     fun backPressed(): Boolean {
@@ -66,5 +64,4 @@ class UsersPresenter(
         compositeDisposable
             .dispose()
     }
-
 }
