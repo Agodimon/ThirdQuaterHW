@@ -48,11 +48,12 @@ class UsersPresenter(
                         usersListPresenter
                             .users
                             .addAll(users)
+                        viewState
+                            .updateList()
                     }
             )
 
-        viewState
-            .updateList()
+
     }
 
     fun backPressed(): Boolean {
