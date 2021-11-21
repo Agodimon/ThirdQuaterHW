@@ -10,6 +10,7 @@ class GithubUsersRepo {
         GithubUser("login4"),
         GithubUser("login5")
     )
+
     fun getUsers(): Single<List<GithubUser>> {
         return Single.just(repositories)
     }
