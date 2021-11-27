@@ -22,7 +22,6 @@ class UsersFragment : MvpAppCompatFragment(R.layout.fragment_users), UsersView, 
         fun newInstance(): Fragment = UsersFragment()
     }
 
-
     private val presenter: UsersPresenter by moxyPresenter {
         UsersPresenter(
             AndroidSchedulers.mainThread(),
