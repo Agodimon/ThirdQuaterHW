@@ -1,18 +1,23 @@
 package com.bignerdranch.android.thirdquaterhw.presenter
 
 import com.bignerdranch.android.thirdquaterhw.model.GithubUser
-import com.bignerdranch.android.thirdquaterhw.model.GithubUsersRepo
+import com.bignerdranch.android.thirdquaterhw.model.IGithubUsersRepo
 import com.bignerdranch.android.thirdquaterhw.view.UserItemView
 import com.bignerdranch.android.thirdquaterhw.view.UsersView
 import com.github.terrakok.cicerone.Router
+import io.reactivex.rxjava3.core.Scheduler
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import moxy.MvpPresenter
 
 class UsersPresenter(
-    private val usersRepo: GithubUsersRepo,
+    private val uiScheduler: Scheduler,
+    private val usersRepo: IGithubUsersRepo,
     private val router: Router,
     private val screens: IScreens
-) : MvpPresenter<UsersView>() {
+)
+    : MvpPresenter<UsersView>() {
+
+
     class UsersListPresenter : IUserListPresenter {
         val users = mutableListOf<GithubUser>()
         override var itemClickListener: ((UserItemView) -> Unit)? = null
@@ -21,39 +26,38 @@ class UsersPresenter(
 
         override fun bindView(view: UserItemView) {
             val user = users[view.pos]
-            view.setLogin(user.login)
+            user.login?.let { view.setLogin(it) }
+            user.avatarUrl?.let {view.loadAvatar(it)}
         }
     }
 
-    private val compositeDisposable = CompositeDisposable()
     val usersListPresenter = UsersListPresenter()
 
     override fun onFirstViewAttach() {
         super.onFirstViewAttach()
         viewState.init()
-        loadData()
+        getUsersFromNet()
 
         usersListPresenter.itemClickListener = { itemView ->
+            //TODO: переход на экран пользователя c помощью router.navigateTo
             val user = usersListPresenter.users[itemView.pos]
-            router.navigateTo(screens.user(user))
+            router.navigateTo(screens.userDetails(user))
         }
     }
 
-    private fun loadData() {
-        compositeDisposable
-            .add(
-                usersRepo
-                    .getUsers()
-                    .subscribe { users ->
-                        usersListPresenter
-                            .users
-                            .addAll(users)
-                        viewState
-                            .updateList()
-                    }
-            )
+    private val disposableUsersList = CompositeDisposable()
 
-
+    private fun getUsersFromNet () {
+        disposableUsersList.add(
+            usersRepo.getUsers()
+                .observeOn(uiScheduler)
+                .doOnError { println("Error: ${it.message}") }
+                .subscribe { repos ->
+                    usersListPresenter.users.clear()
+                    usersListPresenter.users.addAll(repos)
+                    viewState.updateList()
+                }
+        )
     }
 
     fun backPressed(): Boolean {
@@ -63,8 +67,7 @@ class UsersPresenter(
 
     override fun onDestroy() {
         super.onDestroy()
-        compositeDisposable
-            .dispose()
+        disposableUsersList.dispose()
     }
 
 }
