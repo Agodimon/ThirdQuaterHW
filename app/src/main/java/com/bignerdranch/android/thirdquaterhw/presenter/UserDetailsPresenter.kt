@@ -1,7 +1,7 @@
 package com.bignerdranch.android.thirdquaterhw.presenter
 
-import com.bignerdranch.android.thirdquaterhw.model.GithubUser
-import com.bignerdranch.android.thirdquaterhw.model.IGithubUsersRepo
+import com.bignerdranch.android.thirdquaterhw.model.user.GithubUser
+import com.bignerdranch.android.thirdquaterhw.model.repository.IGithubUsersRepo
 import com.bignerdranch.android.thirdquaterhw.model.UserRepo
 import com.bignerdranch.android.thirdquaterhw.view.UserDetailsView
 import com.github.terrakok.cicerone.Router

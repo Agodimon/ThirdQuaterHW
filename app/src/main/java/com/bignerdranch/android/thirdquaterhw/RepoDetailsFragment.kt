@@ -3,7 +3,7 @@ package com.bignerdranch.android.thirdquaterhw
 import androidx.fragment.app.Fragment
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bignerdranch.android.thirdquaterhw.databinding.FragmentRepoDetailsBinding
-import com.bignerdranch.android.thirdquaterhw.model.GithubUser
+import com.bignerdranch.android.thirdquaterhw.model.user.GithubUser
 import com.bignerdranch.android.thirdquaterhw.model.UserRepo
 import com.bignerdranch.android.thirdquaterhw.presenter.BackButtonListener
 import com.bignerdranch.android.thirdquaterhw.presenter.RepoDetailsPresenter

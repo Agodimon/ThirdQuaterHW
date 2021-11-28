@@ -6,8 +6,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bignerdranch.android.thirdquaterhw.adapters.RepoRVAdapter
 import com.bignerdranch.android.thirdquaterhw.databinding.FragmentDetailsBinding
-import com.bignerdranch.android.thirdquaterhw.model.GithubUser
-import com.bignerdranch.android.thirdquaterhw.model.RetrofitGithubUsersRepo
+import com.bignerdranch.android.thirdquaterhw.model.user.GithubUser
+import com.bignerdranch.android.thirdquaterhw.model.repository.RetrofitGithubUsersRepo
 import com.bignerdranch.android.thirdquaterhw.presenter.BackButtonListener
 import com.bignerdranch.android.thirdquaterhw.presenter.GlideImageLoader
 import com.bignerdranch.android.thirdquaterhw.presenter.UserDetailsPresenter

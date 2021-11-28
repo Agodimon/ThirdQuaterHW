@@ -1,4 +1,4 @@
-package com.bignerdranch.android.thirdquaterhw.model
+package com.bignerdranch.android.thirdquaterhw.model.user
 
 import android.os.Parcelable
 import com.google.gson.annotations.Expose
@@ -9,5 +9,5 @@ data class GithubUser(
     @Expose val id: String? = null,
     @Expose val login: String? = null,
     @Expose val avatarUrl: String? = null,
-    @Expose val repoListUrl: String? = null
+    @Expose val repoUrl: String? = null
 ) : Parcelable

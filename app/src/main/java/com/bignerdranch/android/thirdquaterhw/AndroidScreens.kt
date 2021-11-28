@@ -1,6 +1,6 @@
 package com.bignerdranch.android.thirdquaterhw
 
-import com.bignerdranch.android.thirdquaterhw.model.GithubUser
+import com.bignerdranch.android.thirdquaterhw.model.user.GithubUser
 import com.bignerdranch.android.thirdquaterhw.model.UserRepo
 import com.bignerdranch.android.thirdquaterhw.presenter.IScreens
 import com.github.terrakok.cicerone.androidx.FragmentScreen
