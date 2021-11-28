@@ -3,6 +3,8 @@ package com.bignerdranch.android.thirdquaterhw.presenter
 import com.bignerdranch.android.thirdquaterhw.model.user.GithubUser
 import com.bignerdranch.android.thirdquaterhw.model.repository.IGithubUsersRepo
 import com.bignerdranch.android.thirdquaterhw.model.UserRepo
+import com.bignerdranch.android.thirdquaterhw.model.network.AndroidNetworkStatus
+import com.bignerdranch.android.thirdquaterhw.model.repository.IGithubUserReposList
 import com.bignerdranch.android.thirdquaterhw.view.UserDetailsView
 import com.github.terrakok.cicerone.Router
 import io.reactivex.rxjava3.core.Scheduler
@@ -10,7 +12,8 @@ import io.reactivex.rxjava3.disposables.CompositeDisposable
 import moxy.MvpPresenter
 
 class UserDetailsPresenter(
-    private val usersRepo: IGithubUsersRepo,
+    private val networkStatus: AndroidNetworkStatus,
+    private val usersRepo: IGithubUserReposList,
     private val router: Router,
     private val user: GithubUser,
     private val mainThread: Scheduler,
@@ -36,24 +39,22 @@ class UserDetailsPresenter(
 
         userRepoListPresenter.itemClickListener = { itemView ->
             val repo = userRepoListPresenter.userRepoList[itemView.pos]
-            router.navigateTo(screens.repoDetails(user, repo))
+            router.navigateTo(screens.repoDetails(networkStatus, user, repo))
         }
     }
 
     private val disposableUserRepoList = CompositeDisposable()
 
-    private lateinit var username: String
     val userRepoListPresenter = ReposListPresenter()
 
     private fun getUserRepoList() {
-        username = user.login.toString()
         disposableUserRepoList.add(
-            usersRepo.getUserRepoList(username)
+            usersRepo.getUserRepoList(user)
                 .observeOn(mainThread)
                 .doOnError { println("Error: ${it.message}") }
                 .subscribe(
                     { setReposList(it) },
-                    { onReturnError (it) }
+                    { onReturnError(it) }
                 )
         )
     }
@@ -66,11 +67,10 @@ class UserDetailsPresenter(
 
     private fun onReturnError(throwable: Throwable) {
         viewState.onLoadingRepoListError(throwable)
-
     }
 
     fun backPressed(): Boolean {
-        router.navigateTo(screens.users())
+        router.navigateTo(screens.users(networkStatus))
         return true
     }
 

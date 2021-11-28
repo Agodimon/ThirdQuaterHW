@@ -2,6 +2,7 @@ package com.bignerdranch.android.thirdquaterhw.presenter
 
 import com.bignerdranch.android.thirdquaterhw.model.database.Database
 import com.bignerdranch.android.thirdquaterhw.model.network.AndroidNetworkStatus
+import com.bignerdranch.android.thirdquaterhw.model.repository.IGithubUserReposList
 import com.bignerdranch.android.thirdquaterhw.model.user.GithubUser
 import com.bignerdranch.android.thirdquaterhw.model.repository.IGithubUsersRepo
 import com.bignerdranch.android.thirdquaterhw.view.UserItemView
@@ -15,6 +16,7 @@ class UsersPresenter(
     private val networkStatus: AndroidNetworkStatus,
     private val uiScheduler: Scheduler,
     private val usersRepo: IGithubUsersRepo,
+    private val usersRepoList: IGithubUserReposList,
     private val router: Router,
     private val screens: IScreens
 ) : MvpPresenter<UsersView>() {
@@ -41,7 +43,7 @@ class UsersPresenter(
 
         usersListPresenter.itemClickListener = { itemView ->
             val user = usersListPresenter.users[itemView.pos]
-
+            getUserRepoList(user)
             router.navigateTo(screens.userDetails(networkStatus, user, Database.getInstance()))
         }
     }
@@ -62,9 +64,20 @@ class UsersPresenter(
     private fun onUsersListComplete(users: List<GithubUser>) {
         usersListPresenter.users.clear()
         usersListPresenter.users.addAll(users)
+        for (user in users) {
+            getUserRepoList(user)
+        }
         viewState.updateList()
     }
 
+    private fun getUserRepoList(user: GithubUser) {
+        disposableUsersList.add(
+            usersRepoList.getUserRepoList(user)
+                .observeOn(uiScheduler)
+                .doOnError { println("Error: ${it.message}") }
+                .subscribe()
+        )
+    }
 
     fun backPressed(): Boolean {
         router.finishChain()
@@ -75,5 +88,4 @@ class UsersPresenter(
         super.onDestroy()
         disposableUsersList.dispose()
     }
-
 }
