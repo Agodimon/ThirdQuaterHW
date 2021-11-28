@@ -27,7 +27,5 @@ class RepoRVAdapter (
         }
 
         override var pos = -1
-
     }
-
 }
