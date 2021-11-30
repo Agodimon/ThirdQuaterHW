@@ -15,49 +15,52 @@ import com.bignerdranch.android.thirdquaterhw.model.user.RoomUserCache
 import com.bignerdranch.android.thirdquaterhw.presenter.BackButtonListener
 import com.bignerdranch.android.thirdquaterhw.presenter.GlideImageLoader
 import com.bignerdranch.android.thirdquaterhw.presenter.UsersPresenter
+import com.bignerdranch.android.thirdquaterhw.presenter.abs.AbsFragment
 import com.bignerdranch.android.thirdquaterhw.utils.ApiHolder
-import com.bignerdranch.android.thirdquaterhw.utils.CiceroneObject
 import com.bignerdranch.android.thirdquaterhw.view.UsersView
-import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
-import moxy.MvpAppCompatFragment
+import com.github.terrakok.cicerone.Router
+import io.reactivex.rxjava3.core.Scheduler
 import moxy.ktx.moxyPresenter
+import javax.inject.Inject
 
-class UsersFragment(private val networkStatus: AndroidNetworkStatus) : MvpAppCompatFragment
-    (R.layout.fragment_users),
+class UsersFragment
+@Inject constructor (
+    private val networkStatus: AndroidNetworkStatus
+) : AbsFragment(R.layout.fragment_users),
     UsersView, BackButtonListener {
 
     companion object {
-        fun newInstance(networkStatus: AndroidNetworkStatus): Fragment =
-            UsersFragment(networkStatus)
+        fun newInstance(
+            networkStatus: AndroidNetworkStatus): Fragment = UsersFragment(networkStatus)
     }
+
+    @Inject
+    lateinit var router: Router
+
+    @Inject
+    lateinit var screens: AndroidScreens
+
+    @Inject
+    lateinit var mainThread: Scheduler
 
     private val usersCache: RoomUserCache = RoomUserCache.getInstance()
     private val userReposList = RoomRepositoriesCache.getInstance()
 
+    private val githubRepository = RetrofitGithubUsersRepo(ApiHolder.api, networkStatus, Database.getInstance(), usersCache)
+
     private val presenter: UsersPresenter by moxyPresenter {
         UsersPresenter(
-            networkStatus,
-            AndroidSchedulers.mainThread(),
-            RetrofitGithubUsersRepo(
-                ApiHolder.api,
-                networkStatus,
-                Database.getInstance(),
-                usersCache
-            ),
-            RetrofitGithubUserReposList(
-                ApiHolder.api,
-                networkStatus,
-                Database.getInstance(),
-                userReposList
-            ),
-            CiceroneObject.router,
-            AndroidScreens()
+            mainThread,
+            githubRepository,
+            RetrofitGithubUserReposList(ApiHolder.api, networkStatus, Database.getInstance(),userReposList),
+            router,
+            screens
         )
     }
-    private val viewBinding by viewBinding(FragmentUsersBinding::bind)
 
     private var adapter: UsersRVAdapter? = null
 
+    private val viewBinding by viewBinding(FragmentUsersBinding::bind)
 
     override fun init() {
         viewBinding.rvUsers.layoutManager = LinearLayoutManager(context)

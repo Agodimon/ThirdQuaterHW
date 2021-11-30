@@ -12,7 +12,7 @@ import io.reactivex.rxjava3.disposables.CompositeDisposable
 import moxy.MvpPresenter
 
 class UserDetailsPresenter(
-    private val networkStatus: AndroidNetworkStatus,
+    private val networkStatus : AndroidNetworkStatus,
     private val usersRepo: IGithubUserReposList,
     private val router: Router,
     private val user: GithubUser,
@@ -39,7 +39,7 @@ class UserDetailsPresenter(
 
         userRepoListPresenter.itemClickListener = { itemView ->
             val repo = userRepoListPresenter.userRepoList[itemView.pos]
-            router.navigateTo(screens.repoDetails(networkStatus, user, repo))
+            router.navigateTo(screens.repoDetails(user, repo))
         }
     }
 
@@ -54,7 +54,7 @@ class UserDetailsPresenter(
                 .doOnError { println("Error: ${it.message}") }
                 .subscribe(
                     { setReposList(it) },
-                    { onReturnError(it) }
+                    { onReturnError (it) }
                 )
         )
     }

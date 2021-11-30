@@ -4,39 +4,42 @@ import android.annotation.SuppressLint
 import androidx.fragment.app.Fragment
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bignerdranch.android.thirdquaterhw.databinding.FragmentRepoDetailsBinding
-import com.bignerdranch.android.thirdquaterhw.model.user.GithubUser
 import com.bignerdranch.android.thirdquaterhw.model.UserRepo
-import com.bignerdranch.android.thirdquaterhw.model.network.AndroidNetworkStatus
+import com.bignerdranch.android.thirdquaterhw.model.user.GithubUser
 import com.bignerdranch.android.thirdquaterhw.presenter.BackButtonListener
 import com.bignerdranch.android.thirdquaterhw.presenter.RepoDetailsPresenter
-import com.bignerdranch.android.thirdquaterhw.utils.CiceroneObject
+import com.bignerdranch.android.thirdquaterhw.presenter.abs.AbsFragment
 import com.bignerdranch.android.thirdquaterhw.view.RepoView
-import moxy.MvpAppCompatFragment
+import com.github.terrakok.cicerone.Router
 import moxy.ktx.moxyPresenter
+import javax.inject.Inject
 
 class RepoDetailsFragment(
-    private val networkStatus: AndroidNetworkStatus,
     private val user: GithubUser,
     private val repo: UserRepo
 ) :
-    MvpAppCompatFragment(R.layout.fragment_repo_details), RepoView, BackButtonListener {
+    AbsFragment(R.layout.fragment_repo_details), RepoView, BackButtonListener {
+
     private val viewBinding by viewBinding(FragmentRepoDetailsBinding::bind)
+
+    @Inject
+    lateinit var router: Router
+
+    @Inject
+    lateinit var screens: AndroidScreens
+
     private val presenter by moxyPresenter {
         RepoDetailsPresenter(
-            networkStatus,
             repo,
             user,
-            CiceroneObject.router,
-            AndroidScreens(),
+            router,
+            screens,
         )
     }
 
     companion object {
-        fun newInstance(
-            networkStatus: AndroidNetworkStatus,
-            user: GithubUser,
-            repo: UserRepo
-        ): Fragment = RepoDetailsFragment(networkStatus, user, repo)
+        fun newInstance(user: GithubUser, repo: UserRepo): Fragment
+                = RepoDetailsFragment(user, repo)
     }
 
     @SuppressLint("SetTextI18n")
@@ -49,5 +52,5 @@ class RepoDetailsFragment(
     }
 
     override fun backPressed(): Boolean = presenter.backPressed()
-
 }
+

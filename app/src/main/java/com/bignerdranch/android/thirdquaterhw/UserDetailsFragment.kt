@@ -9,33 +9,48 @@ import com.bignerdranch.android.thirdquaterhw.databinding.FragmentDetailsBinding
 import com.bignerdranch.android.thirdquaterhw.model.database.Database
 import com.bignerdranch.android.thirdquaterhw.model.network.AndroidNetworkStatus
 import com.bignerdranch.android.thirdquaterhw.model.repository.RetrofitGithubUserReposList
-import com.bignerdranch.android.thirdquaterhw.model.user.GithubUser
-import com.bignerdranch.android.thirdquaterhw.model.repository.RetrofitGithubUsersRepo
 import com.bignerdranch.android.thirdquaterhw.model.repository.RoomRepositoriesCache
+import com.bignerdranch.android.thirdquaterhw.model.user.GithubUser
 import com.bignerdranch.android.thirdquaterhw.presenter.BackButtonListener
 import com.bignerdranch.android.thirdquaterhw.presenter.GlideImageLoader
 import com.bignerdranch.android.thirdquaterhw.presenter.UserDetailsPresenter
+import com.bignerdranch.android.thirdquaterhw.presenter.abs.AbsFragment
 import com.bignerdranch.android.thirdquaterhw.utils.ApiHolder
-import com.bignerdranch.android.thirdquaterhw.utils.CiceroneObject
 import com.bignerdranch.android.thirdquaterhw.view.UserDetailsView
-import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
-import moxy.MvpAppCompatFragment
+import com.github.terrakok.cicerone.Router
+import io.reactivex.rxjava3.core.Scheduler
 import moxy.ktx.moxyPresenter
+import javax.inject.Inject
 
 class UserDetailsFragment(
-    private val networkStatus: AndroidNetworkStatus,
     private val user: GithubUser,
     private val db: Database
 ) :
-    MvpAppCompatFragment(R.layout.fragment_details), BackButtonListener, UserDetailsView {
+    AbsFragment(R.layout.fragment_details), BackButtonListener, UserDetailsView {
 
     companion object {
-        fun newInstance(
-            networkStatus: AndroidNetworkStatus,
-            user: GithubUser,
-            db: Database
-        ): Fragment = UserDetailsFragment(networkStatus, user, db)
+        private const val ARG_USER = "user"
+
+        fun newInstance(user: GithubUser, db: Database, text : String): Fragment {
+            val fragment = UserDetailsFragment(user, db)
+            fragment.arguments?.putString("login", text)
+            return fragment
+        }
+
+//        = UserDetailsFragment(user, db).arguments("test" to text)
     }
+
+    @Inject
+    lateinit var router: Router
+
+    @Inject
+    lateinit var networkStatus : AndroidNetworkStatus
+
+    @Inject
+    lateinit var mainThread: Scheduler
+
+    @Inject
+    lateinit var screens: AndroidScreens
 
     private val userReposList = RoomRepositoriesCache.getInstance()
 
@@ -43,15 +58,14 @@ class UserDetailsFragment(
         UserDetailsPresenter(
             networkStatus,
             RetrofitGithubUserReposList(ApiHolder.api, networkStatus, db, userReposList),
-            CiceroneObject.router,
+            router,
             user,
-            AndroidSchedulers.mainThread(),
-            AndroidScreens()
+            mainThread,
+            screens
         )
     }
 
     private val viewBinding by viewBinding(FragmentDetailsBinding::bind)
-
 
     private var adapter: RepoRVAdapter? = null
 

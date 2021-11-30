@@ -1,6 +1,5 @@
 package com.bignerdranch.android.thirdquaterhw
 
-import com.bignerdranch.android.thirdquaterhw.di.AppComponent
 import com.bignerdranch.android.thirdquaterhw.di.DaggerAppComponent
 import com.bignerdranch.android.thirdquaterhw.model.network.AndroidNetworkStatus
 import com.github.terrakok.cicerone.Cicerone

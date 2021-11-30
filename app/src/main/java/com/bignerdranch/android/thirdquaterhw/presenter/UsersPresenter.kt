@@ -1,10 +1,9 @@
 package com.bignerdranch.android.thirdquaterhw.presenter
 
 import com.bignerdranch.android.thirdquaterhw.model.database.Database
-import com.bignerdranch.android.thirdquaterhw.model.network.AndroidNetworkStatus
 import com.bignerdranch.android.thirdquaterhw.model.repository.IGithubUserReposList
-import com.bignerdranch.android.thirdquaterhw.model.user.GithubUser
 import com.bignerdranch.android.thirdquaterhw.model.repository.IGithubUsersRepo
+import com.bignerdranch.android.thirdquaterhw.model.user.GithubUser
 import com.bignerdranch.android.thirdquaterhw.view.UserItemView
 import com.bignerdranch.android.thirdquaterhw.view.UsersView
 import com.github.terrakok.cicerone.Router
@@ -13,7 +12,6 @@ import io.reactivex.rxjava3.disposables.CompositeDisposable
 import moxy.MvpPresenter
 
 class UsersPresenter(
-    private val networkStatus: AndroidNetworkStatus,
     private val uiScheduler: Scheduler,
     private val usersRepo: IGithubUsersRepo,
     private val usersRepoList: IGithubUserReposList,
@@ -44,7 +42,7 @@ class UsersPresenter(
         usersListPresenter.itemClickListener = { itemView ->
             val user = usersListPresenter.users[itemView.pos]
             getUserRepoList(user)
-            router.navigateTo(screens.userDetails(networkStatus, user, Database.getInstance()))
+            router.navigateTo(screens.userDetails(user, Database.getInstance()))
         }
     }
 
