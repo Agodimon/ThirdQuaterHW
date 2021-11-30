@@ -2,6 +2,8 @@ package com.bignerdranch.android.thirdquaterhw
 
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bignerdranch.android.thirdquaterhw.databinding.ActivityMainBinding
+import com.bignerdranch.android.thirdquaterhw.model.database.Database
+import com.bignerdranch.android.thirdquaterhw.model.network.AndroidNetworkStatus
 import com.bignerdranch.android.thirdquaterhw.presenter.BackButtonListener
 import com.bignerdranch.android.thirdquaterhw.presenter.MainPresenter
 import com.bignerdranch.android.thirdquaterhw.utils.CiceroneObject
@@ -14,7 +16,14 @@ class MainActivity : MvpAppCompatActivity(R.layout.activity_main), MainView {
 
     private val navigator = AppNavigator(this, R.id.container)
     private val binding by viewBinding(ActivityMainBinding::bind)
-    private val presenter by moxyPresenter { MainPresenter(CiceroneObject.router, AndroidScreens()) }
+    private val presenter by moxyPresenter {
+        MainPresenter(
+            CiceroneObject.router,
+            AndroidScreens(),
+            AndroidNetworkStatus(this),
+            Database.create(this)
+        )
+    }
 
 
     override fun onResumeFragments() {

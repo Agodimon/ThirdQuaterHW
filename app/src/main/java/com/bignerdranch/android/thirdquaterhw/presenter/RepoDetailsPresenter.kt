@@ -1,12 +1,15 @@
 package com.bignerdranch.android.thirdquaterhw.presenter
 
-import com.bignerdranch.android.thirdquaterhw.model.GithubUser
+import com.bignerdranch.android.thirdquaterhw.model.user.GithubUser
 import com.bignerdranch.android.thirdquaterhw.model.UserRepo
+import com.bignerdranch.android.thirdquaterhw.model.database.Database
+import com.bignerdranch.android.thirdquaterhw.model.network.AndroidNetworkStatus
 import com.bignerdranch.android.thirdquaterhw.view.RepoView
 import com.github.terrakok.cicerone.Router
 import moxy.MvpPresenter
 
 class RepoDetailsPresenter (
+    private val networkStatus: AndroidNetworkStatus,
     private val repo: UserRepo,
     private val user: GithubUser,
     private val router: Router,
@@ -19,7 +22,7 @@ class RepoDetailsPresenter (
     }
 
     fun backPressed(): Boolean {
-        router.navigateTo(screens.userDetails(user))
+        router.navigateTo(screens.userDetails(networkStatus, user, Database.getInstance()))
         return true
     }
 

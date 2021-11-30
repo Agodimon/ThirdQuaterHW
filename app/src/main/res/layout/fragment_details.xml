@@ -9,10 +9,10 @@
 
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/details_userImage"
-        android:layout_width="120dp"
-        android:layout_height="120dp"
-        android:layout_marginTop="100dp"
-        android:layout_marginStart="50dp"
+        android:layout_width="@dimen/iv_details_userImage_layout_width"
+        android:layout_height="@dimen/iv_details_userImage_layout_height"
+        android:layout_marginTop="@dimen/iv_marginTop"
+        android:layout_marginStart="@dimen/iv_marginStart"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/ic_baseline_person_24" />
@@ -21,10 +21,10 @@
         android:id="@+id/details_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="40dp"
-        android:hint="Name"
-        android:textSize="20dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginStart="@dimen/tv_details_name_margin_start"
+        android:hint="@string/name"
+        android:textSize="@dimen/tv_textSize_name"
+        android:layout_marginTop="@dimen/tv_marginTop"
         app:layout_constraintStart_toEndOf="@id/details_userImage"
         app:layout_constraintTop_toTopOf="@id/details_userImage">
 
@@ -34,8 +34,8 @@
         android:id="@+id/testButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Test"
-        android:layout_marginTop="30dp"
+        android:text="@string/test"
+        android:layout_marginTop="@dimen/btn_idTestButton_marginTop"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/details_userImage">
@@ -44,11 +44,11 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_Repos"
-        android:layout_width="300dp"
-        android:layout_height="400dp"
+        android:layout_width="@dimen/rv_Repos_layout_width"
+        android:layout_height="@dimen/rv_Repos_layout_height"
         android:clipToPadding="false"
-        android:paddingTop="16dp"
-        android:paddingBottom="16dp"
+        android:paddingTop="@dimen/rv_Repos_padding"
+        android:paddingBottom="@dimen/rv_Repos_padding"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />

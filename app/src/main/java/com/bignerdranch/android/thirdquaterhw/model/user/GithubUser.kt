@@ -1,4 +1,4 @@
-package com.bignerdranch.android.thirdquaterhw.model
+package com.bignerdranch.android.thirdquaterhw.model.user
 
 import android.os.Parcelable
 import com.google.gson.annotations.Expose
