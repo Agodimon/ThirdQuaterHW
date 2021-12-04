@@ -8,7 +8,7 @@ import dagger.android.DaggerApplication
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.plugins.RxJavaPlugins
 
-class AppDagger : DaggerApplication() {
+class    AppDagger : DaggerApplication() {
     override fun applicationInjector(): AndroidInjector<AppDagger> =
         DaggerAppComponent
             .builder()

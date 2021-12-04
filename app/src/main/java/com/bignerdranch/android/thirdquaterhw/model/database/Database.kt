@@ -18,9 +18,9 @@ abstract class Database : RoomDatabase() {
         private var instance: Database? = null
         fun getInstance() = instance ?: throw RuntimeException("Database has not been created. Please call create(context)")
 
-        fun create(context: Context?) {
+        fun create(context: Context) {
             if (instance == null) {
-                instance = Room.databaseBuilder(context!!, Database::class.java, DB_NAME)
+                instance = Room.databaseBuilder(context, Database::class.java, DB_NAME)
                     .build()
             }
         }
