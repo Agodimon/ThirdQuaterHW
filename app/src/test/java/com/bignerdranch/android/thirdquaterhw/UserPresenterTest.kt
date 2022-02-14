@@ -2,6 +2,8 @@ package com.bignerdranch.android.thirdquaterhw
 
 
 import com.bignerdranch.android.thirdquaterhw.model.GithubUser
+import com.bignerdranch.android.thirdquaterhw.model.IGithubUsersRepo
+import com.bignerdranch.android.thirdquaterhw.presenter.IScreens
 import com.bignerdranch.android.thirdquaterhw.presenter.UserDetailsPresenter
 import com.github.terrakok.cicerone.Router
 import com.nhaarman.mockito_kotlin.times
@@ -22,7 +24,7 @@ class UserPresenterTest {
     private lateinit var router: Router
 
     @Mock
-    private lateinit var repository: GithubRepositoriesRepo
+    private lateinit var repository: IGithubUsersRepo
 
     @Mock
     private lateinit var scheduler: Scheduler
@@ -30,15 +32,18 @@ class UserPresenterTest {
     @Mock
     private lateinit var user: GithubUser
 
+    @Mock
+    private lateinit var  screens: IScreens
+
     @Before
     fun setUp() {
         MockitoAnnotations.initMocks(this)
-        presenter = UserPresenter(repository, router, scheduler, user)
+        presenter = UserDetailsPresenter(repository,router,user,scheduler,screens)
     }
 
     @Test
     fun userPresenterBackClick_Test() {
-        presenter.backClick()
+        presenter.backPressed()
         verify(repository, times(1))
     }
 
